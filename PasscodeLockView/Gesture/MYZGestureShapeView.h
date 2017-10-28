@@ -7,8 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CYMacro.h"
+
+#define CircleColor UIColorWithHex(0x33CCFF)
 
 @interface MYZGestureShapeView : UIView
+
+@property (nonatomic, strong) UIColor *circleColor;
 
 @property (nonatomic, copy) NSString * gestureCode;
 

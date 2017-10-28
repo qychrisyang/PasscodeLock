@@ -36,10 +36,93 @@ CGFloat const LineWidth = 4.0f;
 
 @implementation MYZGestureView
 
+@synthesize lineNormalColor = _lineNormalColor, lineSelectedColor = _lineSelectedColor, lineErrorColor = _lineErrorColor;
 
+- (UIColor *)lineNormalColor {
+    if (_lineNormalColor == nil) {
+        _lineNormalColor = LineNormalColor;
+    }
+    
+    return _lineNormalColor;
+}
 
+- (void)setLineNormalColor:(UIColor *)lineNormalColor {
+    _lineNormalColor = lineNormalColor;
+    [self refreshLineColor];
+}
+
+- (UIColor *)lineSelectedColor {
+    if (_lineSelectedColor == nil) {
+        _lineSelectedColor = LineSelectedColor;
+    }
+    
+    return _lineSelectedColor;
+}
+
+- (void)setLineSelectedColor:(UIColor *)lineSelectedColor {
+    _lineSelectedColor = lineSelectedColor;
+    [self refreshLineColor];
+}
+
+- (UIColor *)lineErrorColor {
+    if (_lineErrorColor == nil) {
+        _lineErrorColor = LineErrorColor;
+    }
+    
+    return _lineErrorColor;
+}
+
+- (void)setLineErrorColor:(UIColor *)lineErrorColor {
+    _lineErrorColor = lineErrorColor;
+    [self refreshLineColor];
+}
+
+- (UIColor *)circleNormalColor {
+    MYZCircleView *circleView = [self viewWithTag:CircleViewBaseTag];
+    return circleView.normalColor;
+}
+
+- (void)setCircleNormalColor:(UIColor *)circleNormalColor {
+    for (int i = 0; i < 9; i++) {
+        MYZCircleView *circleView = [self viewWithTag:i + CircleViewBaseTag];
+        circleView.normalColor = circleNormalColor;
+    }
+}
+
+- (UIColor *)circleSelectedColor {
+    MYZCircleView *circleView = [self viewWithTag:CircleViewBaseTag];
+    return circleView.selectedColor;
+}
+
+- (void)setCircleSelectedColor:(UIColor *)circleSelectedColor {
+    for (int i = 0; i < 9; i++) {
+        MYZCircleView *circleView = [self viewWithTag:i + CircleViewBaseTag];
+        circleView.selectedColor = circleSelectedColor;
+    }
+}
+
+- (UIColor *)circleErrorColor {
+    MYZCircleView *circleView = [self viewWithTag:CircleViewBaseTag];
+    return circleView.errorColor;
+}
+
+- (void)setCircleErrorColor:(UIColor *)circleErrorColor {
+    for (int i = 0; i < 9; i++) {
+        MYZCircleView *circleView = [self viewWithTag:i + CircleViewBaseTag];
+        circleView.errorColor = circleErrorColor;
+    }
+}
 
 #pragma mark - initializer
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self initSubviews];
+    }
+    return self;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -116,20 +199,24 @@ CGFloat const LineWidth = 4.0f;
 {
     _gestureViewStatus = gestureViewStatus;
     
+    [self refreshLineColor];
+}
+
+- (void)refreshLineColor {
     if (_gestureViewStatus == GestureViewStatusNormal)
     {
-        self.lineColor = CircleNormalColor;
+        self.lineColor = self.lineNormalColor;
     }
     else if (_gestureViewStatus == GestureViewStatusSelected)
     {
-        self.lineColor = CircleSelectedColor;
+        self.lineColor = self.lineSelectedColor;
     }
     else if (_gestureViewStatus == GestureViewStatusError)
     {
-        self.lineColor = CircleErrorColor;
+        self.lineColor = self.lineErrorColor;
     }
-
     
+    [self setNeedsDisplay];
 }
 
 #pragma mark - draw view

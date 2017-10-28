@@ -16,6 +16,8 @@
 
 @implementation MYZGestureShapeView
 
+@synthesize circleColor = _circleColor;
+
 - (NSMutableArray *)numberArray
 {
     if (_numberArray == nil) {
@@ -52,7 +54,7 @@
         CGRect circleFrame = CGRectMake(circleX, circleY, circleWH, circleWH);
         
         CGContextAddEllipseInRect(cr, circleFrame);
-        [[UIColor blueColor] set];
+        [self.circleColor set];
         
         NSNumber * n = [self.numberArray objectAtIndex:i];
         if (n.integerValue == 1)
@@ -86,7 +88,19 @@
     
 }
 
+- (UIColor *)circleColor {
+    if (_circleColor == nil) {
+        _circleColor = CircleColor;
+    }
+    
+    return _circleColor;
+}
 
+- (void)setCircleColor:(UIColor *)circleColor {
+    _circleColor = circleColor;
+    
+    [self setNeedsDisplay];
+}
 
 
 @end

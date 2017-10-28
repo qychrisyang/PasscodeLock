@@ -1,5 +1,5 @@
 //
-//  CALayer+shake.m
+//  CALayer+Shake.m
 //  PasscodeLockDemo
 //
 //  Created by MA806P on 16/8/10.
@@ -8,7 +8,7 @@
 
 #import "CALayer+shake.h"
 
-@implementation CALayer (shake)
+@implementation CALayer (Shake)
 
 - (void)shake
 {

@@ -1,5 +1,5 @@
 //
-//  CALayer+shake.h
+//  CALayer+Shake.h
 //  PasscodeLockDemo
 //
 //  Created by MA806P on 16/8/10.
@@ -8,7 +8,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-@interface CALayer (shake)
+@interface CALayer (Shake)
 
 - (void)shake;
 

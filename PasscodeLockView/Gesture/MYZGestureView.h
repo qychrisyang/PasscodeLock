@@ -8,7 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+#define LineNormalColor CircleNormalColor
+#define LineSelectedColor CircleSelectedColor
+#define LineErrorColor CircleErrorColor
+
 @interface MYZGestureView : UIView
+
+@property (nonatomic, strong) UIColor *lineNormalColor;
+@property (nonatomic, strong) UIColor *lineSelectedColor;
+@property (nonatomic, strong) UIColor *lineErrorColor;
+
+@property (nonatomic, strong) UIColor *circleNormalColor;
+@property (nonatomic, strong) UIColor *circleSelectedColor;
+@property (nonatomic, strong) UIColor *circleErrorColor;
 
 /**
  *  手势操作完成回调方法,参数为手势划过的顺序密码0-8

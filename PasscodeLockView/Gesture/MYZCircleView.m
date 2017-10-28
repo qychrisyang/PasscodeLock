@@ -26,6 +26,46 @@ CGFloat const arrowH = 8.0;
 
 @implementation MYZCircleView
 
+@synthesize normalColor = _normalColor, selectedColor = _selectedColor, errorColor = _errorColor;
+
+- (UIColor *)normalColor {
+    if (_normalColor == nil) {
+        _normalColor = CircleNormalColor;
+    }
+    
+    return _normalColor;
+}
+
+- (void)setNormalColor:(UIColor *)normalColor {
+    _normalColor = normalColor;
+    [self refreshCircleColor];
+}
+
+- (UIColor *)selectedColor {
+    if (_selectedColor == nil) {
+        _selectedColor = CircleSelectedColor;
+    }
+    
+    return _selectedColor;
+}
+
+- (void)setSelectedColor:(UIColor *)selectedColor {
+    _selectedColor = selectedColor;
+    [self refreshCircleColor];
+}
+
+- (UIColor *)errorColor {
+    if (_errorColor == nil) {
+        _errorColor = CircleErrorColor;
+    }
+    
+    return _errorColor;
+}
+
+- (void)setErrorColor:(UIColor *)errorColor {
+    _errorColor = errorColor;
+    [self refreshCircleColor];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -87,38 +127,28 @@ CGFloat const arrowH = 8.0;
     
 }
 
+- (void)refreshCircleColor {
+    if (_circleStatus == GestureViewStatusNormal)
+    {
+        self.circleColor = self.normalColor;
+    }
+    else if (_circleStatus == GestureViewStatusSelected || _circleStatus == GestureViewStatusSelectedAndShowArrow)
+    {
+        self.circleColor = self.selectedColor;
+    }
+    else if (_circleStatus == GestureViewStatusError || _circleStatus == GestureViewStatusErrorAndShowArrow)
+    {
+        self.circleColor = self.errorColor;
+    }
+    
+    [self setNeedsDisplay];
+}
 
 - (void)setCircleStatus:(GestureViewStatus)circleStatus
 {
     _circleStatus = circleStatus;
     
-    if (_circleStatus == GestureViewStatusNormal)
-    {
-        self.circleColor = CircleNormalColor;
-    }
-    else if (_circleStatus == GestureViewStatusSelected || _circleStatus == GestureViewStatusSelectedAndShowArrow)
-    {
-        self.circleColor = CircleSelectedColor;
-    }
-    else if (_circleStatus == GestureViewStatusError || _circleStatus == GestureViewStatusErrorAndShowArrow)
-    {
-        self.circleColor = CircleErrorColor;
-    }
-    
-    
-    [self setNeedsDisplay];
+    [self refreshCircleColor];
 }
-
-
-
-//- (void)setAngle:(CGFloat)angle
-//{
-//    _angle = angle;
-//    
-//    [self setNeedsDisplay];
-//}
-
-
-
 
 @end
