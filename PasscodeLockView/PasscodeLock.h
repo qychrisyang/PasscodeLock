@@ -16,6 +16,6 @@
 #import "MYZPasscodeInfoView.h"
 #import "MYZPasscodeView.h"
 
-#import "CALayer+Shake.h"
+#import "CALayer+shake.h"
 
 #endif /* PasscodeLock_h */
