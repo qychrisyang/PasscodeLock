@@ -49,6 +49,15 @@ NSInteger const NumberViewBaseTag = 77;
 
 #pragma mark - initializer
 
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self initSubviews];
+    }
+    return self;
+}
+
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame])
