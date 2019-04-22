@@ -14,6 +14,16 @@
 
 @property (nonatomic, copy) BOOL(^PasscodeResult)(NSString * passcode);
 
+@property (nonatomic, assign) NSInteger numberOfPasscode;
 @property (nonatomic, getter=isHideFingerprintBtn) BOOL hideFingerprintBtn;
+@property (nonatomic, getter=isHideDeleteBtn) BOOL hideDeleteBtn;
+
+@property (nonatomic, strong) UIColor *passcodeColor;
+
+@property (nonatomic) CGFloat numberFontSize;
+@property (nonatomic) UIFontWeight numberFontWeight;
+
+- (void)deleteLastPasscode;
+- (void)clearPasscode;
 
 @end

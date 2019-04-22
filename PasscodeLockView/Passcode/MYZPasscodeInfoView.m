@@ -16,6 +16,7 @@
     if (self = [super initWithFrame:frame])
     {
         self.backgroundColor = [UIColor clearColor];
+        self.infoColor = [UIColor grayColor];
     }
     return self;
 }
@@ -25,10 +26,15 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
+    NSInteger numberOfPasscode = DefaultPasscodeCount;
+    if (self.numberOfPasscode > 0) {
+        numberOfPasscode = self.numberOfPasscode;
+    }
+    
     // Drawing code
     
     CGContextRef cr = UIGraphicsGetCurrentContext();
-    [[UIColor grayColor] set];
+    [self.infoColor set];
     
     CGFloat h = rect.size.height;
     CGFloat w = rect.size.width;
@@ -36,13 +42,13 @@
     
     CGFloat marginLR = 15.0;
     CGFloat circleWH = (8.0/568.0)*[UIScreen mainScreen].bounds.size.height;
-    CGFloat marginLeft = (w - circleWH * PasscodeCount * 1.0 - marginLR * (PasscodeCount - 1) * 1.0) * 0.5;
+    CGFloat marginLeft = (w - circleWH * numberOfPasscode * 1.0 - marginLR * (numberOfPasscode - 1) * 1.0) * 0.5;
     CGFloat circleY = h > circleWH ? (h - circleWH) * 0.5 : 0.0;
     
     
     
     
-    for (int i = 0; i < PasscodeCount; i++)
+    for (int i = 0; i < numberOfPasscode; i++)
     {
         CGFloat circleX = marginLeft + (circleWH + marginLR) * i;
         
@@ -60,9 +66,23 @@
     
 }
 
+
+- (void)setNumberOfPasscode:(NSInteger)numberOfPasscode
+{
+    _numberOfPasscode = numberOfPasscode;
+    
+    [self setNeedsDisplay];
+}
+
 - (void)setInfoCount:(NSInteger)infoCount
 {
     _infoCount = infoCount;
+    
+    [self setNeedsDisplay];
+}
+
+- (void)setInfoColor:(UIColor *)infoColor {
+    _infoColor = infoColor;
     
     [self setNeedsDisplay];
 }

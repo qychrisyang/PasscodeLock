@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-FOUNDATION_EXPORT NSInteger const PasscodeCount;
+FOUNDATION_EXPORT NSInteger const DefaultPasscodeCount;
 
 @interface MYZPasscodeInfoView : UIView
 
+@property (nonatomic) NSInteger numberOfPasscode;
 @property (nonatomic) NSInteger infoCount;
+
+@property (nonatomic, strong) UIColor *infoColor;
 
 @end

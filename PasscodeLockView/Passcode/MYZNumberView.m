@@ -18,6 +18,9 @@
     if (self = [super initWithFrame:frame])
     {
         self.backgroundColor = [UIColor clearColor];
+        self.numberColor = [UIColor grayColor];
+        self.numberFontSize = 30;
+        self.numberFontWeight = UIFontWeightThin;
     }
     return self;
 }
@@ -46,16 +49,16 @@
     }
     else
     {
-        [NumberViewColor set];
+        [self.numberColor set];
         CGContextStrokePath(cr);
     }
 
     
     NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     style.alignment = NSTextAlignmentCenter;
-    UIColor * textColor = NumberViewColor;
+    UIColor * textColor = self.numberColor;
     
-    NSDictionary * attributeDic = @{NSFontAttributeName : [UIFont systemFontOfSize:30 weight:UIFontWeightThin], NSForegroundColorAttributeName : textColor, NSParagraphStyleAttributeName : style};
+    NSDictionary * attributeDic = @{NSFontAttributeName : [UIFont systemFontOfSize:self.numberFontSize weight:self.numberFontWeight], NSForegroundColorAttributeName : textColor, NSParagraphStyleAttributeName : style};
     
     //计算数字居中
     CGSize textSize = [self.numberText boundingRectWithSize:rect.size options:NSStringDrawingUsesLineFragmentOrigin attributes:attributeDic context:nil].size;
@@ -85,6 +88,22 @@
     [self setNeedsDisplay];
 }
 
+- (void)setNumberColor:(UIColor *)numberColor {
+    _numberColor = numberColor;
+    
+    [self setNeedsDisplay];
+}
 
+- (void)setNumberFontSize:(CGFloat)numberFontSize {
+    _numberFontSize = numberFontSize;
+    
+    [self setNeedsDisplay];
+}
+
+- (void)setNumberFontWeight:(UIFontWeight)numberFontWeight {
+    _numberFontWeight = numberFontWeight;
+    
+    [self setNeedsDisplay];
+}
 
 @end

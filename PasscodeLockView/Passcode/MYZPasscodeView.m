@@ -13,8 +13,8 @@
 
 #import <LocalAuthentication/LocalAuthentication.h>
 
-/** 设置密码几位数 */
-NSInteger const PasscodeCount = 4;
+/** 默认设置密码几位数 */
+NSInteger const DefaultPasscodeCount = 4;
 
 NSInteger const NumberViewBaseTag = 77;
 
@@ -71,8 +71,15 @@ NSInteger const NumberViewBaseTag = 77;
 
 - (void)initSubviews
 {
+    _numberOfPasscode = DefaultPasscodeCount;
+    _passcodeColor = [UIColor grayColor];
+    _numberFontSize = 30;
+    _numberFontWeight = UIFontWeightThin;
+    
     //输入密码的数量指示视图
     MYZPasscodeInfoView * infoView = [[MYZPasscodeInfoView alloc] init];
+    infoView.numberOfPasscode = self.numberOfPasscode;
+    infoView.infoColor = self.passcodeColor;
     [self addSubview:infoView];
     self.infoView = infoView;
     
@@ -80,6 +87,9 @@ NSInteger const NumberViewBaseTag = 77;
     for (int i=0; i<10; i++)
     {
         MYZNumberView * numberView = [[MYZNumberView alloc] init];
+        numberView.numberFontSize = self.numberFontSize;
+        numberView.numberColor = self.passcodeColor;
+        numberView.numberFontWeight = self.numberFontWeight;
         numberView.numberText = [NSString stringWithFormat:@"%d",i];
         numberView.tag = i + NumberViewBaseTag;
         [self addSubview:numberView];
@@ -97,8 +107,9 @@ NSInteger const NumberViewBaseTag = 77;
 //        {
             //指纹按钮
             UIButton * fingerprintBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            fingerprintBtn.tintColor = self.passcodeColor;
             fingerprintBtn.contentMode = UIViewContentModeCenter;
-            [fingerprintBtn setImage:[UIImage imageNamed:@"fingerprint"] forState:UIControlStateNormal];
+            [fingerprintBtn setImage:[[UIImage imageNamed:@"fingerprint"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
             [fingerprintBtn setImage:[UIImage imageNamed:@"fingerprint_h"] forState:UIControlStateHighlighted];
             [fingerprintBtn addTarget:self action:@selector(showFingerprintTouch) forControlEvents:UIControlEventTouchUpInside];
             [self addSubview:fingerprintBtn];
@@ -114,7 +125,7 @@ NSInteger const NumberViewBaseTag = 77;
     //删除按钮
     UIButton * deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [deleteBtn setTitle:@"删除" forState:UIControlStateNormal];
-    [deleteBtn setTitleColor:NumberViewColor forState:UIControlStateNormal];
+    [deleteBtn setTitleColor:self.passcodeColor forState:UIControlStateNormal];
     [deleteBtn setTitleColor:[UIColor colorWithWhite:0.702 alpha:1.000] forState:UIControlStateHighlighted];
     [deleteBtn addTarget:self action:@selector(deleteBtnTouch) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:deleteBtn];
@@ -123,9 +134,13 @@ NSInteger const NumberViewBaseTag = 77;
 }
 
 
-
-
-
+- (void)setNumberOfPasscode:(NSInteger)numberOfPasscode
+{
+    _numberOfPasscode = numberOfPasscode;
+    if (self.infoView) {
+        self.infoView.numberOfPasscode = numberOfPasscode;
+    }
+}
 
 - (void)setHideFingerprintBtn:(BOOL)hideFingerprintBtn
 {
@@ -133,6 +148,49 @@ NSInteger const NumberViewBaseTag = 77;
     if (self.fingerprintBtn)
     {
         self.fingerprintBtn.hidden = hideFingerprintBtn;
+    }
+}
+
+- (void)setHideDeleteBtn:(BOOL)hideDeleteBtn
+{
+    _hideDeleteBtn = hideDeleteBtn;
+    if (self.deleteBtn)
+    {
+        self.deleteBtn.hidden = hideDeleteBtn;
+    }
+}
+
+- (void)setPasscodeColor:(UIColor *)passcodeColor {
+    _passcodeColor = passcodeColor;
+
+    self.infoView.infoColor = passcodeColor;
+    [self.deleteBtn setTitleColor:passcodeColor forState:UIControlStateNormal];
+    self.fingerprintBtn.tintColor = passcodeColor;
+    
+    for (UIView *subview in self.subviews) {
+        if ([subview isKindOfClass:[MYZNumberView class]]) {
+            ((MYZNumberView *)subview).numberColor = passcodeColor;
+        }
+    }
+}
+
+- (void)setNumberFontSize:(CGFloat)numberFontSize {
+    _numberFontSize = numberFontSize;
+    
+    for (UIView *subview in self.subviews) {
+        if ([subview isKindOfClass:[MYZNumberView class]]) {
+            ((MYZNumberView *)subview).numberFontSize = numberFontSize;
+        }
+    }
+}
+
+- (void)setNumberFontWeight:(UIFontWeight)numberFontWeight {
+    _numberFontWeight = numberFontWeight;
+    
+    for (UIView *subview in self.subviews) {
+        if ([subview isKindOfClass:[MYZNumberView class]]) {
+            ((MYZNumberView *)subview).numberFontWeight = numberFontWeight;
+        }
     }
 }
 
@@ -238,7 +296,7 @@ NSInteger const NumberViewBaseTag = 77;
     }
     
     
-    if (self.selectNumberArray.count == PasscodeCount)
+    if (self.selectNumberArray.count == self.numberOfPasscode)
     {
         NSMutableString * passcodeStr = [NSMutableString string];
         for (MYZNumberView * numberView in self.selectNumberArray)
@@ -263,10 +321,19 @@ NSInteger const NumberViewBaseTag = 77;
 //删除按钮
 - (void)deleteBtnTouch
 {
+    [self deleteLastPasscode];
+}
+
+- (void)deleteLastPasscode
+{
     [self.selectNumberArray removeLastObject];
     self.infoView.infoCount = self.selectNumberArray.count;
 }
 
+- (void)clearPasscode {
+    [self.selectNumberArray removeAllObjects];
+    self.infoView.infoCount = 0;
+}
 
 //指纹按钮
 - (void)showFingerprintTouch
@@ -290,7 +357,7 @@ NSInteger const NumberViewBaseTag = 77;
                     //识别成功
                     dispatch_async(dispatch_get_main_queue(), ^{
                         self.PasscodeResult(@"fingerprint");
-                        self.infoView.infoCount = PasscodeCount;
+                        self.infoView.infoCount = self.numberOfPasscode;
                     });
                 }
                 else if (error)

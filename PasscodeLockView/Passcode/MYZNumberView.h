@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define NumberViewColor [UIColor grayColor]
-
 typedef enum : NSUInteger {
     
     NumberViewStateNormal,
@@ -23,5 +21,10 @@ typedef enum : NSUInteger {
 @property (nonatomic, copy) NSString * numberText;
 
 @property (nonatomic) NumberViewState numberViewState;
+
+@property (nonatomic, strong) UIColor *numberColor;
+
+@property (nonatomic) CGFloat numberFontSize;
+@property (nonatomic) UIFontWeight numberFontWeight;
 
 @end
