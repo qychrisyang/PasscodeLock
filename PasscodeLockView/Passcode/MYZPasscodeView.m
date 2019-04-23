@@ -248,6 +248,24 @@ NSInteger const NumberViewBaseTag = 77;
     
 }
 
+- (NSString *)passcodeValue {
+    NSMutableString *passcodeValue = [NSMutableString string];
+    for (MYZNumberView * numberView in self.selectNumberArray)
+    {
+        NSInteger codeInt = numberView.tag - NumberViewBaseTag;
+        [passcodeValue appendString:[NSString stringWithFormat:@"%ld",(long)codeInt]];
+        
+        if (passcodeValue.length >= self.numberOfPasscode) {
+            break;
+        }
+    }
+    return passcodeValue;
+}
+
+- (void)valueDidChanged {
+    self.PasscodeValueDidChanged([self passcodeValue]);
+}
+
 
 #pragma mark - touch event
 
@@ -264,6 +282,7 @@ NSInteger const NumberViewBaseTag = 77;
         {
             numberView.numberViewState = NumberViewStateHighlight;
             [self.selectNumberArray addObject:numberView];
+            [self valueDidChanged];
         }
     }
     
@@ -296,16 +315,9 @@ NSInteger const NumberViewBaseTag = 77;
     }
     
     
-    if (self.selectNumberArray.count == self.numberOfPasscode)
+    if (self.selectNumberArray.count >= self.numberOfPasscode)
     {
-        NSMutableString * passcodeStr = [NSMutableString string];
-        for (MYZNumberView * numberView in self.selectNumberArray)
-        {
-            NSInteger codeInt = numberView.tag - NumberViewBaseTag;
-            [passcodeStr appendString:[NSString stringWithFormat:@"%ld",(long)codeInt]];
-        }
-        
-        BOOL isRight = self.PasscodeResult(passcodeStr);
+        BOOL isRight = self.PasscodeResult([self passcodeValue]);
         if (!isRight)
         {
             [self.infoView.layer shake];
@@ -313,6 +325,7 @@ NSInteger const NumberViewBaseTag = 77;
         
         self.infoView.infoCount = 0;
         [self.selectNumberArray removeAllObjects];
+        [self valueDidChanged];
     }
     
 }
@@ -328,11 +341,13 @@ NSInteger const NumberViewBaseTag = 77;
 {
     [self.selectNumberArray removeLastObject];
     self.infoView.infoCount = self.selectNumberArray.count;
+    [self valueDidChanged];
 }
 
 - (void)clearPasscode {
     [self.selectNumberArray removeAllObjects];
     self.infoView.infoCount = 0;
+    [self valueDidChanged];
 }
 
 //指纹按钮

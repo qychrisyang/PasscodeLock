@@ -13,9 +13,9 @@
 - (void)shake
 {
     CAKeyframeAnimation * keyAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.x"];
-    CGFloat x = 5;
+    CGFloat x = 10;
     keyAnimation.values = @[@(-x),@(0),@(x),@(0),@(-x),@(0),@(x),@(0)];
-    keyAnimation.duration = 0.3;
+    keyAnimation.duration = 0.25;
     keyAnimation.repeatCount = 2;
     keyAnimation.removedOnCompletion = YES;
     [self addAnimation:keyAnimation forKey:nil];

@@ -12,6 +12,7 @@
 
 - (void)showFingerprintTouch;
 
+@property (nonatomic, copy) void(^PasscodeValueDidChanged)(NSString * value);
 @property (nonatomic, copy) BOOL(^PasscodeResult)(NSString * passcode);
 
 @property (nonatomic, assign) NSInteger numberOfPasscode;
